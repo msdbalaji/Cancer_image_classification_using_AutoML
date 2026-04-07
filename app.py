@@ -14,7 +14,7 @@ model = None
 def get_model():
     global model
     if model is None:
-        model = tf.keras.models.load_model('public/model/lung_cancer_nas_model.h5')
+        model = tf.keras.models.load_model('public/model/5lung_cancer_nas_model.h5')
         print("Model loaded successfully!")
         # Warmup: compile TF graph
         model.predict(np.zeros((1, 128, 128, 3), dtype=np.float32))
