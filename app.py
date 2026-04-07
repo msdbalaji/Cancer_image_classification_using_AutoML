@@ -13,6 +13,11 @@ CORS(app, origins=["*"])
 model = tf.keras.models.load_model('public/model/lung_cancer_nas_model.h5')
 print("Model loaded successfully!")
 
+# Warmup: run a dummy prediction so TensorFlow compiles the graph at startup
+dummy_input = np.zeros((1, 128, 128, 3), dtype=np.float32)
+model.predict(dummy_input)
+print("Model warmup complete!")
+
 class_names = {
     0: "Colon Adenocarcinoma (Cancerous)",
     1: "Colon Benign (Non-cancerous)", 
