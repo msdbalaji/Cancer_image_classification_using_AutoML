@@ -7,7 +7,7 @@ import io
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["*"])
 
 # Load the model
 model = tf.keras.models.load_model('public/model/lung_cancer_nas_model.h5')
@@ -62,4 +62,5 @@ def health():
     return jsonify({'status': 'ok', 'model_loaded': True})
 
 if __name__ == '__main__':
-    app.run(port=3001, debug=True)
+    port = int(os.environ.get('PORT', 3001))
+    app.run(host='0.0.0.0', port=port, debug=False)

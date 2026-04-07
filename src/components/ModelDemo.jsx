@@ -9,6 +9,8 @@ const ModelDemo = () => {
   const [imagePreview, setImagePreview] = useState(null)
   const fileInputRef = useRef(null)
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+
   const classNames = {
     0: "Colon Adenocarcinoma (Cancerous)",
     1: "Colon Benign (Non-cancerous)",
@@ -19,7 +21,7 @@ const ModelDemo = () => {
 
   const checkServerHealth = async () => {
     try {
-      const response = await fetch('http://localhost:3001/health')
+      const response = await fetch(`${API_URL}/health`)
       if (response.ok) {
         const data = await response.json()
         setIsModelLoaded(data.model_loaded)
@@ -66,7 +68,7 @@ const ModelDemo = () => {
       const formData = new FormData()
       formData.append('image', selectedImage)
 
-      const response = await fetch('http://localhost:3001/predict', {
+      const response = await fetch(`${API_URL}/predict`, {
         method: 'POST',
         body: formData,
       })
