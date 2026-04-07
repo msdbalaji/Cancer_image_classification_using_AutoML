@@ -9,14 +9,17 @@ import os
 app = Flask(__name__)
 CORS(app, origins=["*"])
 
-# Load the model
-model = tf.keras.models.load_model('public/model/lung_cancer_nas_model.h5')
-print("Model loaded successfully!")
+model = None
 
-# Warmup: run a dummy prediction so TensorFlow compiles the graph at startup
-dummy_input = np.zeros((1, 128, 128, 3), dtype=np.float32)
-model.predict(dummy_input)
-print("Model warmup complete!")
+def get_model():
+    global model
+    if model is None:
+        model = tf.keras.models.load_model('public/model/lung_cancer_nas_model.h5')
+        print("Model loaded successfully!")
+        # Warmup: compile TF graph
+        model.predict(np.zeros((1, 128, 128, 3), dtype=np.float32))
+        print("Model warmup complete!")
+    return model
 
 class_names = {
     0: "Colon Adenocarcinoma (Cancerous)",
@@ -48,7 +51,7 @@ def predict():
         image_array = np.expand_dims(image_array, axis=0)
         
         # Make prediction
-        predictions = model.predict(image_array)
+        predictions = get_model().predict(image_array)
         predicted_class = np.argmax(predictions[0])
         confidence = float(np.max(predictions[0]) * 100)
         
@@ -64,7 +67,8 @@ def predict():
 
 @app.route('/health', methods=['GET'])
 def health():
-    return jsonify({'status': 'ok', 'model_loaded': True})
+    loaded = model is not None
+    return jsonify({'status': 'ok', 'model_loaded': True, 'model_in_memory': loaded})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 3001))
