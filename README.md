@@ -16,7 +16,7 @@ A production-ready medical AI system that leverages **Automated Machine Learning
 ## 📖 Table of Contents
 - [Overview](#-overview)
 - [Key Features](#-key-features)
-- [Architecture](#-architecture)
+- [Architecture](#-%EF%B8%8F-architecture)
 - [Results](#-results)
 - [Quick Start](#-quick-start)
 - [Project Structure](#-project-structure)
