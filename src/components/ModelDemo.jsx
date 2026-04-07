@@ -9,7 +9,7 @@ const ModelDemo = () => {
   const [imagePreview, setImagePreview] = useState(null)
   const fileInputRef = useRef(null)
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+  const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').replace(/\/+$/, '')
 
   const classNames = {
     0: "Colon Adenocarcinoma (Cancerous)",
@@ -82,7 +82,8 @@ const ModelDemo = () => {
       setPrediction(result)
     } catch (error) {
       console.error('Error:', error)
-      alert(`Error classifying image: ${error.message}`)
+      console.error('API_URL was:', API_URL)
+      alert(`Error classifying image: ${error.message}\n\nAPI URL: ${API_URL}/predict\n\nIf URL shows localhost, the environment variable is not set.`)
     }
     setIsLoading(false)
   }
